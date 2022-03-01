@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { AuthContext, AuthProvider } from "./contexts/AuthContext";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Register from "./pages/register";
 
-function App() {
+
+// FUNÇÃO HOC QUE VERIFICA AS ROTAS PRIVADAS
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  if (isAuthenticated === false) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
+
+export function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            {/* Rotas Públicas */}
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* ROTAS PRIVADAS */}
+             <Route path="/home"
+              element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>} />
+
+            {<Route path="*"  element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>} /> }
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </>
+
   );
 }
 
-export default App;
+
