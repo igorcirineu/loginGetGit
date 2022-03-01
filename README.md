@@ -26,12 +26,12 @@ yarn start
 
 * Credenciais validas:
 ```bash
-    email: 'igor@gmail.com',
-    password: '12345678'
+    email: igor@gmail.com
+    password: 12345678
 
-    email: 'hvex@gmail.com',
-    password: '87654321'
- 
+    email: hvex@gmail.com
+    password:'87654321
+
 ```
 
 
